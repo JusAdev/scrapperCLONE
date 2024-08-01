@@ -1,7 +1,7 @@
 const puppeteer = require("puppeteer");
 require("dotenv").config();
 
-const scrapeLogic = async (res) => {
+const scrapeLogic = async (url, selector, res) => {
   const browser = await puppeteer.launch({
     args: [
       "--disable-setuid-sandbox",
@@ -17,27 +17,20 @@ const scrapeLogic = async (res) => {
   try {
     const page = await browser.newPage();
 
-    await page.goto("https://developer.chrome.com/");
+    await page.goto(url);
 
     // Set screen size
     await page.setViewport({ width: 1080, height: 1024 });
 
-    // Type into search box
-    await page.type(".search-box__input", "automate beyond recorder");
+    // Wait for the selector to appear
+    await page.waitForSelector(selector);
 
-    // Wait and click on first result
-    const searchResultSelector = ".search-box__link";
-    await page.waitForSelector(searchResultSelector);
-    await page.click(searchResultSelector);
+    // Get the text content of the element matching the selector
+    const element = await page.$(selector);
+    const textContent = await element.evaluate((el) => el.textContent);
 
-    // Locate the full title with a unique string
-    const textSelector = await page.waitForSelector(
-      "text/Customize and automate"
-    );
-    const fullTitle = await textSelector.evaluate((el) => el.textContent);
-
-    // Print the full title
-    const logStatement = `The title of this blog post is ${fullTitle}`;
+    // Print the text content
+    const logStatement = `The text content of the selected element is: ${textContent}`;
     console.log(logStatement);
     res.send(logStatement);
   } catch (e) {
