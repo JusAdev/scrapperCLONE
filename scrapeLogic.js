@@ -17,13 +17,16 @@ const scrapeLogic = async (url, selector, res) => {
   try {
     const page = await browser.newPage();
 
+    // Set a default timeout of 60 seconds for all operations
+    page.setDefaultTimeout(60000);
+
     await page.goto(url);
 
     // Set screen size
     await page.setViewport({ width: 1080, height: 1024 });
 
-    // Wait for the selector to appear
-    await page.waitForSelector(selector);
+    // Wait for the selector to appear with a 60-second timeout
+    await page.waitForSelector(selector, { timeout: 60000 });
 
     // Get the text content of the element matching the selector
     const element = await page.$(selector);
