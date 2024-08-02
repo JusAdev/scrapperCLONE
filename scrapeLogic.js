@@ -36,7 +36,7 @@ const scrapeLogic = async (url, selector, res) => {
     await page.setViewport({ width: 1080, height: 1024 });
     const pcontent = await page.content();
 
-    if (pcontent.includes('have detected unusual traffic from') || 1 == 1){
+    if (pcontent.includes('have detected unusual traffic from')){
 
       if (pcontent.includes('Sorry, we have detected unusual traffic from your network') || pcontent.includes('Please slide to verify')){
         console.log("inclui ##2")
