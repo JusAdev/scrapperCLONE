@@ -71,7 +71,7 @@ const scrapeLogic = async (url, selector, res) => {
 
 
     let disponivel;
-    if (textContent.includes('Sorry, this item is no longer available!') || pcontent.includes("Sorry, the page you requested can not be found")) {
+    if (textContent.includes('Sorry, this item is no longer available!') || textContent.includes("Sorry, the page you requested can not be found")) {
       disponivel = 'Produto NÃO disponível.';
       console.log(disponivel);
     } else {
