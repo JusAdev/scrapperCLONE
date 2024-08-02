@@ -43,9 +43,11 @@ const scrapeLogic = async (url, selector, res) => {
         console.log("NAO inclui ##2")
       }
 
+      await page.waitForSelector('#nc_1__scale_text', { timeout: 60000 });
       let sliderElement = await page.$('#nc_1__scale_text')
       let slider = await sliderElement.boundingBox()
 
+      await page.waitForSelector('#nc_1_n1z', { timeout: 60000 });
       let sliderHandle = await page.$('#nc_1_n1z')
       let handle = await sliderHandle.boundingBox()
 
