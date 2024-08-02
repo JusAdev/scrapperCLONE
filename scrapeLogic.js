@@ -35,6 +35,24 @@ const scrapeLogic = async (url, selector, res) => {
     await page.setViewport({ width: 1080, height: 1024 });
     const pcontent = await page.content();
 
+    if (pcontent.includes('Sorry, we have detected unusual traffic from your networks')){
+
+      let sliderElement = await page.$('#nc_1__scale_text')
+      let slider = await sliderElement.boundingBox()
+
+      let sliderHandle = await page.$('#nc_1_n1z')
+      let handle = await sliderHandle.boundingBox()
+
+      await page.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2)
+      await page.mouse.down()
+      await page.mouse.move(handle.x + slider.width, handle.y + handle.height / 2, { steps: 50 })
+      await page.mouse.up()
+
+    }else{
+      console.log("nao inclui unusual");
+    }
+
+
     // Wait for the selector to appear with a 60-second timeout
     await page.waitForSelector(selector, { timeout: 160000 });
 
