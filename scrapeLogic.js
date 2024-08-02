@@ -26,8 +26,6 @@ const scrapeLogic = async (url, selector, res) => {
     await page.mouse.move(150, 250, { steps: 10 });
 
 
-    await page.solveRecaptchas();
-
     await page.keyboard.type('Hello World', { delay: 500 });
 
     // Stealth plugin will handle recaptcha solving
