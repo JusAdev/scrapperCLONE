@@ -35,7 +35,13 @@ const scrapeLogic = async (url, selector, res) => {
     await page.setViewport({ width: 1080, height: 1024 });
     const pcontent = await page.content();
 
-    if (pcontent.includes('Sorry, we have detected unusual traffic from your networks')){
+    if (pcontent.includes('have detected unusual traffic from') || 1 == 1){
+
+      if (pcontent.includes('Sorry, we have detected unusual traffic from your network') || pcontent.includes('Please slide to verify')){
+        console.log("inclui ##2")
+      }else{
+        console.log("NAO inclui ##2")
+      }
 
       let sliderElement = await page.$('#nc_1__scale_text')
       let slider = await sliderElement.boundingBox()
