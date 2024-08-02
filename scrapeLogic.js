@@ -8,6 +8,7 @@ puppeteer.use(StealthPlugin());
 const scrapeLogic = async (url, selector, res) => {
   const browser = await puppeteer.launch({
     headless: true,
+    args: [ '--proxy-server=35.185.196.38:3128' ],
     executablePath:
       process.env.NODE_ENV === 'production'
         ? process.env.PUPPETEER_EXECUTABLE_PATH
