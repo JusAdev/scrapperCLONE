@@ -1,14 +1,39 @@
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+const axios = require('axios');
 require('dotenv').config();
 
 // Use the stealth plugin
 puppeteer.use(StealthPlugin());
 
+
+
+
 const scrapeLogic = async (url, selector, res) => {
+
+  let proxyIp;
+
+  async function getProxyIp() {
+      try {
+          const response = await axios.get('https://gimmeproxy.com/api/getProxy');
+          const ip = response.data.ip;
+          const ipPort = response.data.port;
+          proxyIp = `--proxy-server=${ip}:${ipPort}`;
+          console.log('IP Address:', proxyIp);
+      } catch (error) {
+          console.error('Error:', error);
+          proxyIp = "";
+      }
+  }
+
+  await getProxyIp();
+
+  console.log(proxyIp);
+
+
   const browser = await puppeteer.launch({
     headless: true,
-    args: [ '--proxy-server=35.185.196.38:3128' ],
+    args: [ proxyIp ],
     executablePath:
       process.env.NODE_ENV === 'production'
         ? process.env.PUPPETEER_EXECUTABLE_PATH
@@ -81,12 +106,12 @@ const scrapeLogic = async (url, selector, res) => {
 
 
     // Print the text content
-    const logStatement = `The text content of the selected element is: ${textContent} <br> and DISPONÍVEL = ${disponivel} <br> and content = ${pcontent}`;
+    const logStatement = `The text content of the selected element is: ${textContent} <br>IP PROXY = ${proxyIp}<br> and DISPONÍVEL = ${disponivel} <br> and content = ${pcontent}`;
     console.log(logStatement);
     res.send(logStatement);
   } catch (e) {
     console.error(e);
-    res.send(`Something went wrong while running Puppeteer: ${e}`);
+    res.send(`Something went wrong while running Puppeteer: ${e} - Proxy ${proxyIp}`);
   } finally {
     await browser.close();
   }
